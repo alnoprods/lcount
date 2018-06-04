@@ -77,14 +77,14 @@ process_file()
 	EXT=${FILE##*.}
 	
 	# Get the comment defs for this extension (if existing)
-	DEFS=$(echo lcount-def.$EXT.sh)
+	DEFS=$(dirname $0)/$(echo lcount-def.$EXT.sh)
 	if [ -f $DEFS ]; then
 		# Default value is an empty line detector
 		SLC=$DEFAULT
 		MLC=$DEFAULT
 		
 		# Load the defs ($SLC, $MLC)
-		. $(dirname $0)/$DEFS;
+		. $DEFS;
 		
 		# Count all the non-empty lines
 		awk 'NF > 0' $FILE | awk 'BEGIN { }
