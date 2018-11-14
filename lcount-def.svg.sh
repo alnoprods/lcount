@@ -17,6 +17,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # ==================================================================
 
+# ==================================================================
+# Scalable Vector Graphics XML files.
+# ==================================================================
+
 # Single line comment markers
 # NONE
 

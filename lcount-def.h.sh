@@ -17,6 +17,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # ==================================================================
 
+# ==================================================================
+# Header files for C, C++, Objective-C source code documents.
+# ==================================================================
+
 # Single line comment markers
 export SLC="/^\\s*\\/\\//"
 
