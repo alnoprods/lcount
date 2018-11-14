@@ -1,0 +1,2 @@
+# Shell scripts are intended to be used only in contexts where line endings are LF
+*.sh text eol=lf
