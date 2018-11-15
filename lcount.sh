@@ -39,7 +39,8 @@
 # format (using ";" as field separator) with the following fields:
 # * TYPE: the file extension
 # * FILE: the file name, with its relative path
-# * TOTAL: total number of not empty lines in the file
+# * TOTAL: total number of lines in the file (including empty lines)
+# * EMPTY: total number of empty lines in the file
 # * COMMENTS : total number of comment lines in the file
 # * CODE: total number of code lines in the file
 # ==================================================================
@@ -53,7 +54,7 @@ ERR_INVALID_PARAM_TYPE=2
 # @param $1 the message to display
 usage()
 {
-	MSG=$1
+	MSG="$1"
 	echo "Usage:" $(basename $0) "<dir>";
 	echo "$MSG";
 }
@@ -70,8 +71,8 @@ check_params()
 	fi
 
 	# Check the parameter type
-	export DIR=$1
-	if [ ! -d $DIR ]; then
+	export DIR="$1"
+	if [ ! -d "$DIR" ]; then
 		usage "Requires a directory as its only parameter ('$DIR' is not a valid directory)";
 		exit $ERR_INVALID_PARAM_TYPE;
 	fi
@@ -82,7 +83,7 @@ check_params()
 # @param $1 the path and name of the file to process
 process_file()
 {
-	FILE=$1
+	FILE="$1"
 	
 	# Default marker is a non-effective marker (detecting an empty line)
 	DEFAULT="/^$/"
@@ -104,12 +105,11 @@ process_file()
 		. $DEFS;
 
 		# Count all the empty lines
-        EMPTY=$(grep -c "$EMPTY_LINE" $FILE)
+        EMPTY=$(grep -c "$EMPTY_LINE" "$FILE")
 
 		# Count all the non-empty lines
-		grep -v "$EMPTY_LINE" $FILE | awk '
-            BEGIN {
-            }
+		grep -v "$EMPTY_LINE" "$FILE" | awk '
+            BEGIN {}
 
             '$SLC' {
                # We have a single line comment
@@ -130,15 +130,24 @@ process_file()
                printf("'$EXT'; '$FILE'; %4d; %4d; %4d; %4d\n", NR + '$EMPTY', '$EMPTY', SLC + MLC, NR - SLC - MLC);
             } '
 	fi
-}	
+}
 
 # ==================================================================
 # Main program
 # ==================================================================
+# Check the parameters
 check_params $*
+
+# Print a headline
 echo "TYPE; FILE; TOTAL; EMPTY; COMMENTS; CODE";
-for FILENAME in $(find $DIR -type f); do
-	process_file $FILENAME;
+
+# Set the internal field separator to newline only, so that the for loop
+#   will correctly break the data returned by find
+IFS=$'\n'
+
+# Process each file in the given directory
+for FILENAME in $(find "$DIR" -type f); do
+	process_file "$FILENAME"
 done
 
 

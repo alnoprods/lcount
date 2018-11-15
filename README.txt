@@ -19,6 +19,7 @@ Results are printed on the standard output in a CSV compatible
 format (using ";" as field separator) with the following fields:
 * TYPE: the file extension
 * FILE: the file name, with its relative path
-* TOTAL: total number of not empty lines in the file
+* TOTAL: total number of lines in the file (including empty lines)
+* EMPTY: total number of empty lines in the file
 * COMMENTS : total number of comment lines in the file
 * CODE: total number of code lines in the file
