@@ -17,14 +17,24 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # ==================================================================
 
-# ==================================================================
-# Php source code file.
-# ==================================================================
+# single line comment #1
+export VAR="anyValue"
+  # single line comment #2 with leading spaces
+	# single line comment #3 with leading tab
 
-# Single line comment markers: starts with // or #
-export SLC="/^\\s*(\\/\\/|#)/"
+usage()
+{
+    echo "Some hints"
+}
 
-# Multi line comment markers: starts with /* and ends with */
-MLC_START="^\\s*\\/\\*"
-MLC_STOP="\\*\\/"
-export MLC="/$MLC_START/,/$MLC_STOP/"
+if [ $VAR -ne "someValue" ]; then
+    usage "Hello world!"
+  ##
+	##  This block is counted as 8 comment lines.
+  ##
+  ##  Total lines:         40
+  ##  Total empty lines:    4
+  ##  Total comment lines: 28 (single: 28, multi: 0)
+  ##  Total code lines:     8
+  ##
+fi

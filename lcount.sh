@@ -48,7 +48,9 @@
 ERR_INVALID_PARAM_NUMBER=1
 ERR_INVALID_PARAM_TYPE=2
 
-# Usage info about the current script
+# ==================================================================
+# Displays usage info about the current script.
+# @param $1 the message to display
 usage()
 {
 	MSG=$1
@@ -56,12 +58,14 @@ usage()
 	echo "$MSG";
 }
 
-# Checking the parameters
+# ==================================================================
+# Checks the parameters
+# @param $1 the directory to analyse
 check_params()
 {
 	# Requires one parameter
 	if [ $# -ne 1 ]; then
-		usage "Requires exactly one parameter (which should be a directory)";
+		usage "Requires exactly one parameter (which must be a valid directory)";
 		exit $ERR_INVALID_PARAM_NUMBER;
 	fi
 
@@ -73,13 +77,18 @@ check_params()
 	fi
 }
 
-# Processing a single file
+# ==================================================================
+# Processes a single file.
+# @param $1 the path and name of the file to process
 process_file()
 {
 	FILE=$1
 	
 	# Default marker is a non-effective marker (detecting an empty line)
 	DEFAULT="/^$/"
+
+    # Regexp to detect empty lines (including spaces/tabs)
+	EMPTY_LINE="^\\s*$"
 	
 	# Get the file extension
 	EXT=${FILE##*.}
@@ -90,17 +99,36 @@ process_file()
 		# Default value is an empty line detector
 		SLC=$DEFAULT
 		MLC=$DEFAULT
-		
+
 		# Load the defs ($SLC, $MLC)
 		. $DEFS;
-		
+
+		# Count all the empty lines
+        EMPTY=$(grep -c "$EMPTY_LINE" $FILE)
+
 		# Count all the non-empty lines
-		awk 'NF > 0' $FILE | awk 'BEGIN { }
-'$SLC' { ++SLC }
-'$MLC' { ++MLC }
-END {
-printf("'$EXT'; '$FILE'; %4d; %4d; %4d\n", NR, SLC + MLC, NR - SLC - MLC);
-} '
+		grep -v "$EMPTY_LINE" $FILE | awk '
+            BEGIN {
+            }
+
+            '$SLC' {
+               # We have a single line comment
+               ++SLC
+            }
+
+            '$MLC' {
+               # We have a multiple line comment
+               ++MLC
+               if ($0 ~ '$SLC') {
+                  # Single line comment patterns that appear into multiple line comments should not be counted
+                  --SLC
+               }
+            }
+
+            END {
+               # Output computed data
+               printf("'$EXT'; '$FILE'; %4d; %4d; %4d; %4d\n", NR + '$EMPTY', '$EMPTY', SLC + MLC, NR - SLC - MLC);
+            } '
 	fi
 }	
 
@@ -108,7 +136,7 @@ printf("'$EXT'; '$FILE'; %4d; %4d; %4d\n", NR, SLC + MLC, NR - SLC - MLC);
 # Main program
 # ==================================================================
 check_params $*
-echo "TYPE; FILE; TOTAL; COMMENTS; CODE";
+echo "TYPE; FILE; TOTAL; EMPTY; COMMENTS; CODE";
 for FILENAME in $(find $DIR -type f); do
 	process_file $FILENAME;
 done

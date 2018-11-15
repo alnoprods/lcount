@@ -1,5 +1,4 @@
-#!/bin/sh
-
+/*
 # ==================================================================
 #    Copyright (C) 2018 Alexandre Nouvel - http://alnoprods.net
 #
@@ -16,15 +15,30 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # ==================================================================
+ */
 
-# ==================================================================
-# Php source code file.
-# ==================================================================
+// single line comment #1
+public class JavaTest {
+  // single line comment #2 with leading spaces
+	// single line comment #3 with leading tab
+  /** counted as a 1 line multi-line comment. */
+  public final static String CONST_STR = "unused"; // ignored comment
 
-# Single line comment markers: starts with // or #
-export SLC="/^\\s*(\\/\\/|#)/"
+  /**
+   * Multi line comment (counted as 3 comment lines).
+   */
+  public String sampleMethod() {
+     String useless = "useless";
+	
+     return "Hello"; 
+  }
+  
+  /*
+    // This block is counted as 7 comment lines (the empty line below is not counted).
 
-# Multi line comment markers: starts with /* and ends with */
-MLC_START="^\\s*\\/\\*"
-MLC_STOP="\\*\\/"
-export MLC="/$MLC_START/,/$MLC_STOP/"
+    Total lines:         44
+    Total empty lines:    5
+    Total comment lines: 32 (single: 3, multi: 29)
+    Total code lines:     7
+  */
+}

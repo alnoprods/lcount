@@ -1,4 +1,5 @@
-/*
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
 # ==================================================================
 #    Copyright (C) 2018 Alexandre Nouvel - http://alnoprods.net
 #
@@ -15,29 +16,22 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # ==================================================================
- */
+-->
 
-// single line comment #1
-public class Toto {
-  // single line comment #2 with leading spaces
-	// single line comment #3 with leading tab
-  /** counted as a 1 line multi-line comment. */
-  public final static String CONST_STR; // ignored comment
+<!-- Single line comment #1 -->
 
-  /**
-   * Multi line comment (counted as 3 comment lines).
-   */
-  public String sampleMethod() {
-     String useless = "useless";
-	
-     return "Hello"; 
-  }
-  
-  /*
-    This block is counted as 6 comment lines (the empty line below is not counted).
+<rootElement>
 
-    Total lines:         38
-    Total comment lines: 31 (single: 3, multi: 28)
-    Total code lines:     7
-  */
-}
+    <!-- single line comment #2 with leading spaces -->
+		<!-- single line comment #3 with 2 leading tabs -->
+    <innerElement/>
+
+    <!--
+        This block is counted as 5 comment lines (the empty line below is not counted).
+
+        Total lines:         37
+        Total empty lines:    5
+        Total comment lines: 28 (single: 0, multi: 28)
+        Total code lines:     4
+    -->
+</rootElement>
