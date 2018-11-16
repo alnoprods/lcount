@@ -1,19 +1,19 @@
-#Counter of code and comment lines.
+# Counter of code and comment lines.
 
-##What is it for?
+## What is it for?
 This program counts lines of code and comments of all the files 
 in a given directory, provided there is a definition of the 
 comment markers for the languages used in the directory files.
 
-##How does it work?
+## How does it work?
 It takes into account single comment lines and multi-line comments.
 If a line contains both an instruction and a comment, the comment
 will be ignored.
 
-Empty lines are ignored.
+Empty lines are counted separately.
 
-The symbol definitions that allow the detection of comments are 
-read from separate files which names follow the pattern:
+The definitions that allow the detection of comments are 
+read from separate files which names follow this pattern:
 ```
 lcount-def.<langage-extension>.sh
 ```
@@ -33,7 +33,7 @@ format (using `;` as field separator) with the following fields:
 * `COMMENTS` : total number of comment lines in the file
 * `CODE`: total number of code lines in the file
 
-##How to use it?
+## How to use it?
 Download and put it in any directory of a Unix/Linux system 
 (including Cygwin). Add this directory to your `PATH` variable.
 
@@ -50,7 +50,7 @@ lcount.sh <directory-to-analyse> > <result-file>.csv
 The CSV file can be opened by any spreadsheet processor to compute
 the rate of comment over code per file, etc.
 
-##What if a language definition is missing?
+## What if a language definition is missing?
 Just add a file with the regular expressions needed to define
 single and multiple line comment markers.
 
@@ -67,4 +67,6 @@ For example, for `C` language it is `/\\/\\*/,/\\*\\//`, which
 means that it starts with the sequence `/*` and ends with the
 sequence `*/`.
 
-Don't hesitate to submit new files :)
+## Improvements, ideas...
+* Don't hesitate to submit new language definition files :)
+* Options to configure the program could be helpful
