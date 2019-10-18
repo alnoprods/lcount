@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # ==================================================================
 #    Copyright (C) 2018 Alexandre Nouvel - http://alnoprods.net
@@ -54,9 +54,9 @@ ERR_INVALID_PARAM_TYPE=2
 # @param $1 the message to display
 usage()
 {
-	MSG="$1"
-	echo "Usage:" $(basename $0) "<dir>";
-	echo "$MSG";
+    MSG="$1"
+    echo "Usage:" $(basename $0) "<dir>";
+    echo "$MSG";
 }
 
 # ==================================================================
@@ -64,18 +64,18 @@ usage()
 # @param $1 the directory to analyse
 check_params()
 {
-	# Requires one parameter
-	if [ $# -ne 1 ]; then
-		usage "Requires exactly one parameter (which must be a valid directory)";
-		exit $ERR_INVALID_PARAM_NUMBER;
-	fi
+    # Requires one parameter
+    if [ $# -ne 1 ]; then
+        usage "Requires exactly one parameter (which must be a valid directory)";
+        exit $ERR_INVALID_PARAM_NUMBER;
+    fi
 
-	# Check the parameter type
-	export DIR="$1"
-	if [ ! -d "$DIR" ]; then
-		usage "Requires a directory as its only parameter ('$DIR' is not a valid directory)";
-		exit $ERR_INVALID_PARAM_TYPE;
-	fi
+    # Check the parameter type
+    export DIR="$1"
+    if [ ! -d "$DIR" ]; then
+        usage "Requires a directory as its only parameter ('$DIR' is not a valid directory)";
+        exit $ERR_INVALID_PARAM_TYPE;
+    fi
 }
 
 # ==================================================================
@@ -83,32 +83,32 @@ check_params()
 # @param $1 the path and name of the file to process
 process_file()
 {
-	FILE="$1"
-	
-	# Default marker is a non-effective marker (detecting an empty line)
-	DEFAULT="/^$/"
+    FILE="$1"
+
+    # Default marker is a non-effective marker (detecting an empty line)
+    DEFAULT="/^$/"
 
     # Regexp to detect empty lines (including spaces/tabs)
-	EMPTY_LINE="^\\s*$"
-	
-	# Get the file extension
-	EXT=${FILE##*.}
-	
-	# Get the comment defs for this extension (if existing)
-	DEFS=$(dirname $0)/$(echo lcount-def.$EXT.sh)
-	if [ -f $DEFS ]; then
-		# Default value is an empty line detector
-		SLC=$DEFAULT
-		MLC=$DEFAULT
+    EMPTY_LINE="^\\s*$"
 
-		# Load the defs ($SLC, $MLC)
-		. $DEFS;
+    # Get the file extension
+    EXT=${FILE##*.}
 
-		# Count all the empty lines
+    # Get the comment defs for this extension (if existing)
+    DEFS=$(dirname $0)/$(echo lcount-def.$EXT.sh)
+    if [ -f $DEFS ]; then
+        # Default value is an empty line detector
+	SLC=$DEFAULT
+	MLC=$DEFAULT
+
+        # Load the defs ($SLC, $MLC)
+        . $DEFS;
+
+        # Count all the empty lines
         EMPTY=$(grep -c "$EMPTY_LINE" "$FILE")
 
-		# Count all the non-empty lines
-		grep -v "$EMPTY_LINE" "$FILE" | awk '
+        # Count all the non-empty lines
+        grep -v "$EMPTY_LINE" "$FILE" | awk '
             BEGIN {}
 
             '$SLC' {
@@ -129,7 +129,7 @@ process_file()
                # Output computed data
                printf("'$EXT'; '$FILE'; %4d; %4d; %4d; %4d\n", NR + '$EMPTY', '$EMPTY', SLC + MLC, NR - SLC - MLC);
             } '
-	fi
+        fi
 }
 
 # ==================================================================
@@ -147,7 +147,7 @@ IFS=$'\n'
 
 # Process each file in the given directory
 for FILENAME in $(find "$DIR" -type f); do
-	process_file "$FILENAME"
+    process_file "$FILENAME"
 done
 
 
